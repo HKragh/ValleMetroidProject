@@ -19,11 +19,11 @@ public class Health : MonoBehaviour
 
         if(currentHealth > 0)
         {
-            //take damage
+            //take damage animation her!!!
         }
         else
         {
-            //Player death
+            //Player death animation her!!!
         }
     }
 
@@ -35,6 +35,9 @@ public class Health : MonoBehaviour
         }
     }
 
-
+    public void AddHealth(float _value)
+    {
+        currentHealth = Mathf.Clamp(currentHealth + _value, 0, startingHealth);
+    }
 
 }
