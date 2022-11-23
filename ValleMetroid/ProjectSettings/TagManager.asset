@@ -40,18 +40,21 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: FarBackground
+    uniqueID: 2417342665
+    locked: 0
+  - name: Backround
+    uniqueID: 1959438537
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Background
-    uniqueID: 2417342665
-    locked: 0
   - name: Ground
-    uniqueID: 1959438537
-    locked: 0
-  - name: PLayers
     uniqueID: 2581592663
     locked: 0
   - name: Foreground
     uniqueID: 474849549
+    locked: 0
+  - name: Canvas
+    uniqueID: 442970323
     locked: 0

@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class Healthpoint : MonoBehaviour
 {
-    public float healthvalue = 1f;
+    [SerializeField] private float healthvalue = 1f;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "Player")
         {
             collision.GetComponent<Health>().AddHealth(healthvalue);
+
             gameObject.SetActive(false);
            
         }

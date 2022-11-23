@@ -7,6 +7,7 @@ public class Health : MonoBehaviour
     [SerializeField] private float startingHealth;
     public float currentHealth { get; private set; }
     public KeyCode damageKey;
+    private bool dead;
 
     private void Awake()
     {
@@ -23,7 +24,14 @@ public class Health : MonoBehaviour
         }
         else
         {
-            //Player death animation her!!!
+            if (!dead)
+            {
+                //Player death animation her!!!
+
+                GetComponent<PlayerController>().enabled = false;
+                dead = true;
+
+            }
         }
     }
 
