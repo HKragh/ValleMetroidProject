@@ -5,6 +5,7 @@ using UnityEngine;
 public class killPlayer1 : MonoBehaviour
 {
     public GameObject player1;
+    public GameObject player2;
     public Transform respawnPoint;
 
 
@@ -13,6 +14,11 @@ public class killPlayer1 : MonoBehaviour
         if (other.gameObject.CompareTag("Player1"))
         {
             player1.transform.position = respawnPoint.position;
+        }
+
+        if (other.gameObject.CompareTag("Player1"))
+        {
+            player2.transform.position = respawnPoint.position;
         }
     }
 

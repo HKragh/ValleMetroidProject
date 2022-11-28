@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
+   public PlayerController pC;
     [SerializeField] private float startingHealth;
     public float currentHealth { get; private set; }
     public KeyCode damageKey;
@@ -17,6 +18,8 @@ public class Health : MonoBehaviour
     public void TakeDamage(float _damage)
     {
         currentHealth = Mathf.Clamp(currentHealth - _damage, 0, startingHealth);
+
+        pC.MoveToLastSpawnPoint();
 
         if(currentHealth > 0)
         {

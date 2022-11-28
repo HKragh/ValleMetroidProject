@@ -13,7 +13,26 @@ public class PlayerController : MonoBehaviour
     public bool isGrounded;
     bool facingLeft = true;
     private float inputX;
-    public Animator anim;  
+    public Animator anim;
+    private SpawnPoint currentSpawnPoint = null;
+    private int indexOfSpawnPoint = -1;
+    private Vector3 startPos;
+
+    private void Awake()
+    {
+        startPos = transform.position;
+    }
+    public void MoveToLastSpawnPoint()
+    {
+        if(currentSpawnPoint != null)
+        {
+            transform.position = currentSpawnPoint.transform.position;
+        }
+        else
+        {
+            transform.position = startPos;
+        }
+    }
 
     // Update is called once per frame
     void Update()
@@ -32,10 +51,41 @@ public class PlayerController : MonoBehaviour
             Flip();
         }
 
-        //MOVEMENT ANIMATION 
+        //MOVEMENT ANIMATION
+        if (anim)
         anim.SetFloat("Speed", Mathf.Abs(inputX));
 
+
+        if (currentSpawnPoint == null)
+        {
+            SpawnPoint firstBigger = SpawnPoint.spawnPoints.Find(s => s.transform.position.x > transform.position.x);
+            if (firstBigger != null)
+            {
+                int indexOfFirstBigger = SpawnPoint.spawnPoints.IndexOf(firstBigger);
+                if (indexOfFirstBigger > 0)
+                {
+                    currentSpawnPoint = SpawnPoint.spawnPoints[indexOfFirstBigger - 1];
+                    indexOfSpawnPoint = indexOfFirstBigger - 1;
+                }
+                
+            }
+        }
+        else
+        {
+            if(indexOfSpawnPoint < SpawnPoint.spawnPoints.Count - 1)
+            {
+                if (transform.position.x >= SpawnPoint.spawnPoints[indexOfSpawnPoint + 1].transform.position.x)
+                {
+                    currentSpawnPoint = SpawnPoint.spawnPoints[indexOfSpawnPoint + 1];
+                    indexOfSpawnPoint++;
+                }
+            }
+
+        }
+
     }
+
+
 
     public void Move(InputAction.CallbackContext context)
     {
