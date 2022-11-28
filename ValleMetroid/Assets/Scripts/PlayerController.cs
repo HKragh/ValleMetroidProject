@@ -32,7 +32,9 @@ public class PlayerController : MonoBehaviour
             Flip();
         }
 
+        //MOVEMENT ANIMATION 
         anim.SetFloat("Speed", Mathf.Abs(inputX));
+
     }
 
     public void Move(InputAction.CallbackContext context)
