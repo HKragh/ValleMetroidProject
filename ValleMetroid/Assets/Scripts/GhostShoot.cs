@@ -1,45 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GhostShoot : MonoBehaviour
 {
-    public KeyCode shootingKey;
     public Projectile projectileTemplate;
     private Projectile[] projectiles = new Projectile[237];  // array of projectiles
     public List<Projectile> projectileList = new List<Projectile>();
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Vector3 offset;
+    public PlayerController PC;
+    
 
     // Update is called once per frame
-    void Update()
+    public void Shoot1(InputAction.CallbackContext context)
     {
-        if (Input.GetKeyDown(shootingKey))
-
+        if (context.phase == InputActionPhase.Started)
         {
-            // if shooting key is pressed
-            Shoot();
+            
+            int dirFactor = 1;
+            if (PC.facingLeft)
+            {
+                dirFactor = -1;
+            }
+            Projectile newProjectile = Instantiate(projectileTemplate);
+            newProjectile.transform.position = transform.position + offset * dirFactor;
+            newProjectile.Setup(10, Vector2.right * dirFactor);
+            projectileList.Add(newProjectile);
         }
     }
-
-    void Shoot()
-    {
-        // Generate a projectile
-        // make it fly!
-
-        Debug.Log("Shoot");
-
-        Projectile newProjectile = Instantiate(projectileTemplate);
-        newProjectile.transform.position = transform.position;
-        newProjectile.Setup(10, Vector2.right);
-        projectileList.Add(newProjectile);
-
-        // i want to class setup on this new projectile
-
-    }
-
 }
-

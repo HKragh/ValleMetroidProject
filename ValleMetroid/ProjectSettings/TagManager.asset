@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Player1
   - Player2
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -13,11 +14,11 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player1
+  - Player2
+  - Projectile
+  - Enemy
+  - EnemyProjectile
   - 
   - 
   - 

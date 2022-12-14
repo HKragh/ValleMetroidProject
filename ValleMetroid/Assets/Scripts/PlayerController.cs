@@ -2,26 +2,50 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+public enum CharacterType
+{
+    Ghost = 0,
+    Skeleton = 1,
+}
 
 public class PlayerController : MonoBehaviour
 {
+    public static List<PlayerController> players = new List<PlayerController>();
+
+
+    public CharacterType characterType;
     public Rigidbody2D theRB;
+
+    [Header("Movement")]
     public float moveSpeed;
     public float jumpForce;
-    public Transform groundPoint;
-    public LayerMask whatIsGround;
+    public bool facingLeft = true;
     public bool isGrounded;
-    bool facingLeft = true;
     private float inputX;
+
+    public LayerMask whatIsGround;
     public Animator anim;
     private SpawnPoint currentSpawnPoint = null;
     private int indexOfSpawnPoint = -1;
     private Vector3 startPos;
+    public float groundRadius = .55f;
 
     private void Awake()
     {
+        if (players.Find(p => p.characterType == characterType) == null)
+        {
+            players.Add(this);
+        }
+
         startPos = transform.position;
     }
+
+    private void OnDestroy()
+    {
+        players.Remove(this);
+    }
+
     public void MoveToLastSpawnPoint()
     {
         if(currentSpawnPoint != null)
@@ -37,10 +61,16 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.instance.gameState != GameState.Play)
+        {
+            theRB.velocity = Vector2.zero;
+            return;
+        }
+
         theRB.velocity = new Vector2(inputX * moveSpeed, theRB.velocity.y);
 
         //check if on the ground
-        isGrounded = Physics2D.OverlapCircle(transform.position, .55f, whatIsGround);
+        isGrounded = Physics2D.OverlapCircle(transform.position, groundRadius, whatIsGround);
 
         if(inputX > 0 && facingLeft)
         {
@@ -55,7 +85,6 @@ public class PlayerController : MonoBehaviour
         if (anim)
         anim.SetFloat("Speed", Mathf.Abs(inputX));
 
-
         if (currentSpawnPoint == null)
         {
             SpawnPoint firstBigger = SpawnPoint.spawnPoints.Find(s => s.transform.position.x > transform.position.x);
@@ -66,8 +95,7 @@ public class PlayerController : MonoBehaviour
                 {
                     currentSpawnPoint = SpawnPoint.spawnPoints[indexOfFirstBigger - 1];
                     indexOfSpawnPoint = indexOfFirstBigger - 1;
-                }
-                
+                } 
             }
         }
         else
@@ -80,11 +108,14 @@ public class PlayerController : MonoBehaviour
                     indexOfSpawnPoint++;
                 }
             }
-
         }
-
     }
 
+
+    public void Die()
+    {
+        anim.Play("Death");
+    }
 
 
     public void Move(InputAction.CallbackContext context)
@@ -96,7 +127,6 @@ public class PlayerController : MonoBehaviour
     {  
         if ((isGrounded && context.phase == InputActionPhase.Started)) /* || (!isGrounded && context.phase == InputActionPhase.Canceled))*/
         {
-
             theRB.velocity = new Vector2(theRB.velocity.x, jumpForce);
         }
     }
